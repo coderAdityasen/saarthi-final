@@ -36,6 +36,7 @@ function Signup() {
       });
       
       if (res.data.success === true) {
+        localStorage.setItem('userData', JSON.stringify(res.data.data));
 		setLoading(false)
         return console.log(res.data.message);
       }

@@ -34,7 +34,7 @@ router.route("/logout").post(verifyJWT , logOutUser)
 
 router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrrentPassword)
-router.route("/current-user").get(verifyJWT, getCurrUser)
+router.route("/current-user").get( verifyJWT , getCurrUser)
 router.route("/update-account").patch(verifyJWT, updateAccountDetail)
 
 router.route("/avatar").patch(verifyJWT, upload.single("avatar"), upadteAvatar)

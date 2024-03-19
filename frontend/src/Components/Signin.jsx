@@ -5,40 +5,40 @@ import axios from 'axios';
 function Signin() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate()
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password ) {
-      return console.log('Please fill out all fields.');
+      setError('Please fill out all fields.');
+      return;
     }
     try {
       setLoading(true);
-     
       const res = await axios.post('http://localhost:8000/api/v1/users/login', formData, {
         headers: {
-          'Content-Type': 'application/json', // Set content type to multipart/form-data
+          'Content-Type': 'application/json',
         },
       });
 
-      
       if (res.data.success === true) {
-		setLoading(false)
-
-		return navigate("/")
-      }
-      setLoading(false);
-      if (res.status === 200) {
-        console.log('send user to profile page');
+        setLoading(false);
+        setError('');
+        // Save user data to local storage upon successful login
+        localStorage.setItem('userData', JSON.stringify(res.data.data));
+        navigate("/home");
+      } else {
+        setLoading(false);
+        setError(res.data.message || 'Sign in failed. Please try again.');
       }
     } catch (error) {
       setLoading(false);
+      setError('An error occurred during sign in. Please try again later.');
     }
   };
 
@@ -58,9 +58,8 @@ function Signin() {
           <div className='flex-1'>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
              
-             
               <div>
-                <label htmlfor='email' />
+                <label htmlFor='email' />
                 <input
                   type='email'
                   placeholder='name@company.com'
@@ -70,8 +69,7 @@ function Signin() {
               </div>
 
               <div>
-
-                <label htmlfor='password' />
+                <label htmlFor='password' />
                 <input
                   type='password'
                   placeholder='Password'
@@ -83,11 +81,13 @@ function Signin() {
               <button id='' className='bg-black text-white' type='submit' disabled={loading}>
                 {loading ? <span className='pl-3'>Loading...</span> : 'Sign in'}
               </button>
+              
+              {error && <p className="text-red-500">{error}</p>}
             </form>
             <div className='flex gap-2 text-sm mt-5'>
-              <span>Have an account?</span>
-              <Link to='/sign-in' className='text-blue-500'>
-                Sign In
+              <span>Don't have an account?</span>
+              <Link to='/signup' className='text-blue-500'>
+                Sign Up
               </Link>
             </div>
           </div>

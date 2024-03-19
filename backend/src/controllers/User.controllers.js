@@ -134,20 +134,20 @@ const loginUser = asyncHandler(async (req, res) => {
   };
 
   return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-      new apiresponse(
-        200,
-        {
-          user: loggedInUser,
-          accessToken,
-          refreshToken,
-        },
-        "user logged in successfully"
-      )
-    );
+  .status(200)
+  .cookie("accessToken", accessToken, options)
+  .cookie("refreshToken", refreshToken, options)
+  .json(
+    new apiresponse(
+      200,
+      {
+        user: loggedInUser,
+        accessToken,
+        refreshToken,
+      },
+      "user logged in successfully"
+    )
+  );
 });
 
 const logOutUser = asyncHandler(async (req, res) => {
@@ -238,9 +238,11 @@ const changeCurrrentPassword = asyncHandler(async (req, res) => {
 });
 
 const getCurrUser = asyncHandler(async (req, res) => {
-  return res
-    .status(200)
-    .json(new apiresponse(200, req.user, "current user fetched"));
+  const user = await User.findById(req.params.userId);
+  if (!user) {
+    return res.status(404).json(new apiresponse(404, null, "User not found"));
+  }
+  return res.status(200).json(new apiresponse(200, user, "Current user fetched"));
 });
 
 const updateAccountDetail = asyncHandler(async (req, res) => {
