@@ -31,7 +31,7 @@ function Signin() {
         setError('');
         // Save user data to local storage upon successful login
         localStorage.setItem('userData', JSON.stringify(res.data.data));
-        navigate("/home");
+       return navigate("/");
       } else {
         setLoading(false);
         setError(res.data.message || 'Sign in failed. Please try again.');

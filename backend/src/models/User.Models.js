@@ -47,6 +47,9 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    community :{
+      type : [],
+    }
   },
   
   { timestamps: true }

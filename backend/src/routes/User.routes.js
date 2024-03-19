@@ -10,6 +10,7 @@ import {  registerUser,
 	updateCoverImage,  } from "../controllers/User.controllers.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 import { verifyJWT } from "../middlewares/auth.middlewares.js";
+import { addComment } from "../controllers/Community.controllers.js";
 
 const router = Router()
 
@@ -36,6 +37,7 @@ router.route("/refresh-token").post(refreshAccessToken)
 router.route("/change-password").post(verifyJWT, changeCurrrentPassword)
 router.route("/current-user").get( verifyJWT , getCurrUser)
 router.route("/update-account").patch(verifyJWT, updateAccountDetail)
+router.route("/community/post").post( addComment)
 
 router.route("/avatar").patch(verifyJWT, upload.single("avatar"), upadteAvatar)
 router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateCoverImage)

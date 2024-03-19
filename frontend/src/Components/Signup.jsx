@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 
 function Signup() {
   const [formData, setFormData] = useState({});
   const [avatar, setAvatar] = useState(null); 
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
@@ -37,8 +39,10 @@ function Signup() {
       
       if (res.data.success === true) {
         localStorage.setItem('userData', JSON.stringify(res.data.data));
+       
+
 		setLoading(false)
-        return console.log(res.data.message);
+        return navigate("/")
       }
       setLoading(false);
       if (res.status === 200) {
